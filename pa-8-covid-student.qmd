@@ -130,6 +130,18 @@ Create a graph that maps the number of cases in California in 2021 only. Be sure
 ```{r}
 #| label: ca-2021-covid
 
+cases |> 
+  filter(state == "California") |> 
+  mutate(date = as_date(date),
+         month = month(date, label = TRUE, abbr = FALSE),
+         year = year(date)) |> 
+  filter(year == 2021) |>
+  group_by(month) |> 
+  summarise(total_cases = sum(cases_daily)) |>
+  ggplot() + 
+    geom_col(mapping = aes(x = month, 
+                           y = total_cases)) + 
+  theme(axis.text.x = element_text(angle = 45))
 ```
 
 
@@ -137,7 +149,7 @@ Create a graph that maps the number of cases in California in 2021 only. Be sure
 
 **Which month in 2021 had the fewest number of cases in California?**
 
->Insert Answer Here
+> June
 
 <!-- Swap roles -- Developer becomes Coder, Coder becomes Developer! -->
 
