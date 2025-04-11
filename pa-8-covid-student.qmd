@@ -157,3 +157,26 @@ cases |>
 ### Create your own graph
 
 Using the COVID-19 data, create your graph to answer you own research question. You will submit that graph as png file in your Canvas quiz. Include your research question as the subtitle of the graph.  
+
+```{r}
+#| label: ca-2021-covid
+
+cases |> 
+  filter(state == "California") |> 
+  mutate(date = as_date(date),
+         month = month(date, label = TRUE, abbr = FALSE),
+         year = year(date)) |> 
+  filter(year == 2022) |>
+  group_by(month) |> 
+  summarise(total_cases = sum(cases_daily)) |>
+  ggplot() + 
+    geom_col(mapping = aes(x = month, 
+                           y = total_cases)) + 
+  theme(axis.text.x = element_text(angle = 45)) + 
+  labs(x = "Month in 2022", 
+       y = "Total COVID Cases", 
+       title = "COVID Cases by Month in California in 2022") + 
+  ggsave("PA8_figure.png")
+```
+
+
