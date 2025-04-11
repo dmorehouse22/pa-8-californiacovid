@@ -1,6 +1,6 @@
 ---
 title: "PA 8: COVID-19 Infections and California"
-author: "Group Member Names HEre"
+author: "Danny and Cat"
 format: 
   html: default
   gfm: default
@@ -97,11 +97,18 @@ Below is some code that can help you get started with the process of working wit
 ```{r}
 #| label: calculate-totals-month
 cases |> 
-  filter(____________) |> 
-  mutate(date = ___(date),
-         month = ___(date, label = , abbr = ),
-         year = ___(date)) |> 
-  unite()
+  filter(state == "California") |> 
+  mutate(date = as_date(date),
+         month = month(date, label = TRUE, abbr = FALSE),
+         year = year(date)) |> 
+  unite(month, year, col = "month_year", sep = " ") |> 
+  group_by(month_year) |> 
+  summarise(total_cases = sum(cases_daily)) |>  
+  ggplot() + 
+    geom_col(mapping = aes(x = fct_reorder(month_year, my(month_year)), 
+                           y = total_cases)) + 
+  theme(axis.text.x = element_text(angle = 45))
+  
 ```
 
 
@@ -109,7 +116,7 @@ cases |>
 
 **Which Month in California had the most COVID-19 cases between January 2020 and March 2023?**
 
->Insert Answer Here
+> November 2021
 
 
 <!-- Swap roles -- Developer becomes Coder, Coder becomes Developer! -->
